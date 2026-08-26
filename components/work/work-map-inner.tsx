@@ -48,26 +48,22 @@ export function WorkMapInner({
             key={w.id}
             longitude={w.location.lng}
             latitude={w.location.lat}
-            anchor="bottom"
+            anchor="bottom-left"
             onClick={() => onSelect(w.slug)}
             onMouseEnter={() => onHover(w.slug)}
             onMouseLeave={() => onHover(null)}
           >
             <MarkerContent className={cn(active && "z-10")}>
-              <div className="flex flex-col items-center">
-                {/* 상호명 · 전화번호 라벨 (항상 표시) */}
-                <div
-                  className={cn(
-                    "mb-1 flex flex-col items-center rounded-lg border bg-card px-2 py-1 text-center leading-tight shadow-card transition-transform",
-                    active ? "scale-105 border-primary" : "border-border",
-                  )}
-                >
-                  <span className="max-w-40 truncate text-[12px] font-bold text-foreground">{w.shopName}</span>
-                  {w.phone && (
-                    <span className="text-[10px] text-secondary-foreground tabular-nums">{w.phone}</span>
-                  )}
-                </div>
-                <Pin color={isSelected ? POINT : color} active={active} />
+              {/* 카드 자체가 마커: 카테고리 색 배경 + 흰 글씨, 좌측 정렬. 좌하단 모서리가 좌표 */}
+              <div
+                className={cn(
+                  "flex flex-col items-start rounded-md px-2 py-1 text-left leading-tight text-white shadow-md transition-transform",
+                  active && "scale-105 ring-2 ring-white",
+                )}
+                style={{ backgroundColor: isSelected ? POINT : color }}
+              >
+                <span className="max-w-44 truncate text-[12px] font-bold">{w.shopName}</span>
+                {w.phone && <span className="text-[10px] opacity-90 tabular-nums">{w.phone}</span>}
               </div>
             </MarkerContent>
           </MapMarker>
@@ -75,27 +71,6 @@ export function WorkMapInner({
       })}
       <MapControls position="bottom-right" showLocate={false} showFullscreen={false} />
     </Map>
-  );
-}
-
-/** 물방울 핀. 끝점이 좌표 (anchor="bottom") */
-function Pin({ color, active }: { color: string; active: boolean }) {
-  return (
-    <svg
-      width="28"
-      height="36"
-      viewBox="0 0 28 36"
-      className={cn("drop-shadow-md transition-transform", active && "scale-110")}
-      aria-hidden
-    >
-      <path
-        d="M14 35C14 35 26 21.5 26 13A12 12 0 0 0 2 13C2 21.5 14 35 14 35Z"
-        fill={color}
-        stroke="#fff"
-        strokeWidth="2.5"
-      />
-      <circle cx="14" cy="13" r="4.5" fill="#fff" />
-    </svg>
   );
 }
 
