@@ -30,7 +30,15 @@ grant execute on function is_admin() to anon, authenticated;
 > `security definer`로 두는 이유: RLS가 걸린 `admins`를 정책 안에서 재귀 없이 읽기 위해.
 
 ## 초기 관리자 등록 절차
-1. Supabase Dashboard → Authentication → Users → "Add user" (이메일/비밀번호).
+
+### 방법 A — 스크립트 (권장)
+```bash
+node scripts/create-admin.mjs <이메일> <비밀번호 8자+> [표시이름]
+```
+`.env.local`의 service role 키로 계정 생성(이메일 확인 완료 상태) + `admins` upsert. 같은 이메일이면 비밀번호 재설정.
+
+### 방법 B — 대시보드
+1. Supabase Dashboard → Authentication → Users → "Add user" (이메일/비밀번호, Auto Confirm).
 2. SQL Editor:
    ```sql
    insert into admins (user_id, display_name)

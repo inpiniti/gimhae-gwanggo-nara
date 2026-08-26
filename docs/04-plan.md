@@ -45,12 +45,15 @@
 - [ ] Lighthouse 점검
 
 ## Phase 4 — 관리자 (2일)
-- [ ] Supabase Auth 로그인, `admins` 테이블 + 가드
-- [ ] 작업물 목록/등록/수정/삭제 폼 (react-hook-form + zod)
-- [ ] 주소 검색(Kakao) → 좌표 자동 입력, 지도 핀 드래그 보정
-- [ ] 다중 이미지 업로드 (브라우저 압축 → Storage), 정렬/커버 지정/alt 입력
-- [ ] 저장 시 `revalidatePath`로 공개 페이지 즉시 갱신
+- [x] Supabase Auth 로그인(`/admin/login`), `requireAdmin()` 가드, `/admin/forbidden`, `scripts/create-admin.mjs`
+- [x] 작업물 목록/등록/수정/삭제 (`saveWork`·`setWorkPublished`·`deleteWork`, zod `WorkInput`). react-hook-form 은 쓰지 않고 useState 폼 — 필드 수가 적어 충분
+- [x] 주소 검색(Kakao `geocodeAddress`) → 주소·동·좌표 자동, 지도 핀 드래그 보정, 김해 밖 경고
+- [x] 다중 이미지 업로드 (browser-image-compression → 1600px/400px WebP, EXIF 제거) → Storage 직접 업로드, 순서/대표/alt
+- [x] slug 자동 생성 + 수정 가능 + 서버 중복 처리(`-2` 접미)
+- [x] 저장/공개 토글/삭제 시 `revalidateWork()` 로 공개 페이지 즉시 갱신 — 브라우저 E2E 확인 (등록 → 메인 노출 → 사진 업로드 → 삭제)
+- [x] 카테고리 관리(추가/색상/활성), 댓글 관리(숨김/삭제/사장님 답글) — Phase 5 관리자 부분 선행
 - [ ] 모바일에서 사진 찍어 바로 등록되는지 실기기 테스트
+- [ ] 삭제 확인을 `window.confirm` 대신 Dialog 로 (토스 패턴)
 
 ## Phase 5 — 댓글 (1일)
 - [ ] `CommentList` / `CommentForm` (닉네임+비밀번호+내용)
