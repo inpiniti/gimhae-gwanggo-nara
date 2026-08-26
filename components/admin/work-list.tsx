@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { CategoryBadge } from "@/components/category/category-badge";
-import { business } from "@/lib/domain/business/business";
 import type { CategoryMap } from "@/lib/domain/category/types";
 import { deleteWork, setWorkPublished } from "@/lib/domain/work/actions";
 import type { AdminWorkRow } from "@/lib/domain/work/admin-queries";
@@ -15,25 +14,6 @@ import { ko } from "@/lib/i18n/ko";
 import { cn } from "@/lib/utils";
 
 const t = ko.admin.works;
-const siteUrl = business.siteUrl;
-
-/**
- * Search Console 의 URL 검사 딥링크(`inspect?…&id=`)는 2026-08 현재 `id` 를 주면 404 를 반환한다
- * (계정·인코딩과 무관하게 재현됨). 그래서 확실한 흐름으로 간다:
- * 페이지 URL 을 클립보드에 복사 → 속성 메인만 열기 → 상단 검색창에 붙여넣고 Enter → "색인 생성 요청".
- */
-async function requestIndexing(pageUrl: string) {
-  try {
-    await navigator.clipboard.writeText(pageUrl);
-    toast.success("페이지 URL을 복사했어요. 서치콘솔 상단 검색창에 붙여넣고 Enter → 색인 생성 요청", {
-      duration: 6000,
-    });
-  } catch {
-    toast(pageUrl, { duration: 8000 });
-  }
-  const url = `https://search.google.com/search-console?resource_id=${encodeURIComponent(siteUrl + "/")}`;
-  window.open(url, "_blank", "noopener,noreferrer");
-}
 
 export function WorkList({ works, categoryMap }: { works: AdminWorkRow[]; categoryMap: CategoryMap }) {
   const router = useRouter();
@@ -100,20 +80,9 @@ export function WorkList({ works, categoryMap }: { works: AdminWorkRow[]; catego
                 {w.isPublished ? t.unpublish : t.publish}
               </button>
               {w.isPublished && (
-                <>
-                  <Link href={`/works/${w.slug}`} target="_blank" className="rounded-lg bg-secondary px-2.5 py-1.5">
-                    보기 ↗
-                  </Link>
-                  {/* W-ADM-10: Search Console URL 검사 → 색인 요청 바로가기 */}
-                  <button
-                    type="button"
-                    onClick={() => requestIndexing(`${siteUrl}/works/${w.slug}`)}
-                    className="rounded-lg bg-secondary px-2.5 py-1.5"
-                    title="페이지 URL을 복사하고 서치콘솔을 열어요. 상단 검색창에 붙여넣고 Enter → 색인 생성 요청"
-                  >
-                    구글 색인 요청 ↗
-                  </button>
-                </>
+                <Link href={`/works/${w.slug}`} target="_blank" className="rounded-lg bg-secondary px-2.5 py-1.5">
+                  보기 ↗
+                </Link>
               )}
               <button
                 type="button"
