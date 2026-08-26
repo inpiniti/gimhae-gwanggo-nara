@@ -74,11 +74,14 @@ export async function WorkDetail({ work, variant }: Props) {
         </div>
       </section>
 
-      {variant === "panel" && (
-        <Link href={`/works/${work.slug}`} className="text-center text-sm font-semibold text-primary">
-          {ko.detail.openFull} →
+      <div className="flex gap-3 border-t border-border pt-4 text-[13px] font-semibold">
+        <Link href="/about" className="text-primary">
+          {ko.footer.about}
         </Link>
-      )}
+        <Link href="/privacy" className="text-muted-foreground">
+          {ko.footer.privacy}
+        </Link>
+      </div>
     </article>
   );
 }

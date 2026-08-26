@@ -6,16 +6,24 @@ import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/
 import { useIsDesktop } from "@/lib/hooks/use-media-query";
 import { ko } from "@/lib/i18n/ko";
 
+type Props = {
+  title: string;
+  children: React.ReactNode;
+  /** 지정하면 닫기 시 뒤로가기 대신 이 경로로 이동 (직접 진입한 상세 페이지용) */
+  closeHref?: string;
+};
+
 /**
- * 인터셉트된 상세를 감싸는 껍데기.
+ * 상세를 감싸는 껍데기.
  * 데스크탑: 우측 aside 안에 인라인. 모바일: 바텀시트. 닫기 = 뒤로가기 (W-DET-9).
  */
-export function DetailPanel({ title, children }: { title: string; children: React.ReactNode }) {
+export function DetailPanel({ title, children, closeHref }: Props) {
   const router = useRouter();
   const isDesktop = useIsDesktop();
 
   const close = () => {
-    if (window.history.length > 1) router.back();
+    if (closeHref) router.push(closeHref);
+    else if (window.history.length > 1) router.back();
     else router.push("/");
   };
 

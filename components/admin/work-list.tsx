@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { CategoryBadge } from "@/components/category/category-badge";
+import { business } from "@/lib/domain/business/business";
 import type { CategoryMap } from "@/lib/domain/category/types";
 import { deleteWork, setWorkPublished } from "@/lib/domain/work/actions";
 import type { AdminWorkRow } from "@/lib/domain/work/admin-queries";
@@ -14,7 +15,7 @@ import { ko } from "@/lib/i18n/ko";
 import { cn } from "@/lib/utils";
 
 const t = ko.admin.works;
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "";
+const siteUrl = business.siteUrl;
 
 export function WorkList({ works, categoryMap }: { works: AdminWorkRow[]; categoryMap: CategoryMap }) {
   const router = useRouter();

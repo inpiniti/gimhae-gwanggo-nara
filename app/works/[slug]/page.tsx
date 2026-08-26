@@ -1,17 +1,21 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { SiteFooter } from "@/components/layout/site-footer";
-import { SiteHeader } from "@/components/layout/site-header";
+import { HomeShell } from "@/components/layout/home-shell";
+import { DetailPanel } from "@/components/work/detail-panel";
+import { ExplorerSection } from "@/components/work/explorer-section";
 import { WorkDetail } from "@/components/work/work-detail";
-import { serializeJsonLd, workJsonLd } from "@/lib/seo/jsonld";
 import { listCategories } from "@/lib/domain/category/queries";
 import { toCategoryMap, primaryCategory } from "@/lib/domain/category/types";
 import { business } from "@/lib/domain/business/business";
 import { getPublishedWorkBySlug, listPublishedSlugs } from "@/lib/domain/work/queries";
 import { ko } from "@/lib/i18n/ko";
+import { serializeJsonLd, workJsonLd } from "@/lib/seo/jsonld";
 
-/** SEO용 전체 페이지 — SSG + ISR (docs/03-seo.md). 새 slug 는 첫 요청 시 생성 (dynamicParams 기본 true) */
+/**
+ * SEO용 상세 URL — 직접 진입(검색/공유/새로고침) 시에도 메인과 같은 "지도(좌) + 상세(우)" 화면.
+ * 메인에서 클릭하면 (home)/@panel/(.)works/[slug] 가 인터셉트해 지도는 그대로 두고 패널만 바뀐다.
+ * SSG + ISR. 새 slug 는 첫 요청 시 생성 (dynamicParams 기본 true).
+ */
 export const revalidate = 3600;
 
 type Params = { params: Promise<{ slug: string }> };
@@ -61,22 +65,19 @@ export default async function WorkPage({ params }: Params) {
   const categoryNames = work.categories.map((c) => categoryMap[c]?.name).filter((n): n is string => !!n);
 
   return (
-    <div className="flex min-h-dvh flex-col">
-      <SiteHeader>
-        <Link href="/" className="text-sm font-semibold text-muted-foreground">
-          ← {ko.detail.backToList}
-        </Link>
-      </SiteHeader>
-      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6">
-        <div className="rounded-3xl bg-card p-5 shadow-card sm:p-7">
-          <WorkDetail work={work} variant="page" />
-        </div>
-      </main>
-      <SiteFooter />
+    <>
+      <HomeShell
+        left={<ExplorerSection />}
+        panel={
+          <DetailPanel title={work.shopName} closeHref="/">
+            <WorkDetail work={work} variant="page" />
+          </DetailPanel>
+        }
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(workJsonLd(work, categoryNames)) }}
       />
-    </div>
+    </>
   );
 }
