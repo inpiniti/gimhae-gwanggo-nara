@@ -1,10 +1,11 @@
 import "server-only";
 
-import { createPublicClient } from "@/lib/supabase/public";
+import { createPublicClient, hasSupabaseEnv } from "@/lib/supabase/public";
 import type { PublicComment } from "./types";
 
 /** 공개 댓글 (comments_public 뷰 — 해시 컬럼 없음), 오래된 순 */
 export async function listComments(workId: string): Promise<PublicComment[]> {
+  if (!hasSupabaseEnv()) return [];
   const supabase = createPublicClient();
   const { data, error } = await supabase
     .from("comments_public")

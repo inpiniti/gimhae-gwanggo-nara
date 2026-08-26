@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { createPublicClient } from "@/lib/supabase/public";
+import { createPublicClient, hasSupabaseEnv } from "@/lib/supabase/public";
 
 export const dynamic = "force-dynamic";
 
@@ -15,6 +15,8 @@ export async function GET(req: Request) {
   if (secret && req.headers.get("authorization") !== `Bearer ${secret}`) {
     return NextResponse.json({ ok: false }, { status: 401 });
   }
+
+  if (!hasSupabaseEnv()) return NextResponse.json({ ok: false, error: "supabase env missing" }, { status: 500 });
 
   const { count, error } = await createPublicClient()
     .from("categories")

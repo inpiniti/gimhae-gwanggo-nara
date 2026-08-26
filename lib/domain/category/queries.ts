@@ -1,10 +1,14 @@
 import "server-only";
 
-import { createPublicClient } from "@/lib/supabase/public";
+import { createPublicClient, hasSupabaseEnv, warnMissingSupabaseEnv } from "@/lib/supabase/public";
 import type { Category } from "./types";
 
 /** 전체 카테고리 (비활성 포함). 필터 칩은 isActive 로 걸러 쓴다. */
 export async function listCategories(): Promise<Category[]> {
+  if (!hasSupabaseEnv()) {
+    warnMissingSupabaseEnv("listCategories");
+    return [];
+  }
   const supabase = createPublicClient();
   const { data, error } = await supabase
     .from("categories")

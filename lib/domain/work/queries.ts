@@ -1,11 +1,15 @@
 import "server-only";
 
-import { createPublicClient } from "@/lib/supabase/public";
+import { createPublicClient, hasSupabaseEnv, warnMissingSupabaseEnv } from "@/lib/supabase/public";
 import { workImageUrl } from "@/lib/supabase/storage";
 import type { WorkDetail, WorkImage, WorkListItem } from "./types";
 
 /** 공개 작업물 목록 — 지도/표 공용. 좌표+요약+커버만. */
 export async function listPublishedWorks(): Promise<WorkListItem[]> {
+  if (!hasSupabaseEnv()) {
+    warnMissingSupabaseEnv("listPublishedWorks");
+    return [];
+  }
   const supabase = createPublicClient();
   const { data, error } = await supabase
     .from("works_public_list")
@@ -30,6 +34,10 @@ export async function listPublishedWorks(): Promise<WorkListItem[]> {
 
 /** 공개 작업물 상세. 없거나 비공개면 null. */
 export async function getPublishedWorkBySlug(slug: string): Promise<WorkDetail | null> {
+  if (!hasSupabaseEnv()) {
+    warnMissingSupabaseEnv("getPublishedWorkBySlug");
+    return null;
+  }
   const supabase = createPublicClient();
   const { data: w, error } = await supabase
     .from("works")
@@ -80,6 +88,7 @@ export async function getPublishedWorkBySlug(slug: string): Promise<WorkDetail |
 
 /** generateStaticParams / sitemap 용 */
 export async function listPublishedSlugs(): Promise<{ slug: string; updatedAt: string }[]> {
+  if (!hasSupabaseEnv()) return [];
   const supabase = createPublicClient();
   const { data, error } = await supabase
     .from("works")
