@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { Map, MapControls, MapMarker, MarkerContent, useMap } from "@/components/ui/map";
+import { business } from "@/lib/domain/business/business";
 import { primaryCategory, type CategoryMap } from "@/lib/domain/category/types";
 import type { WorkListItem } from "@/lib/domain/work/types";
 import { GIMHAE_DEFAULT_VIEWPORT, toLngLat } from "@/lib/domain/geo/types";
@@ -38,6 +39,15 @@ export function WorkMapInner({
     >
       <KoreanLabels />
       <FlyTo target={selected} />
+      {/* 광고나라 자체 위치 — 검정 카드, 클릭 동작 없음 */}
+      <MapMarker longitude={business.location.lng} latitude={business.location.lat} anchor="bottom-left">
+        <MarkerContent className="cursor-default">
+          <div className="flex flex-col items-start rounded-md bg-[#191f28] px-2 py-1 text-left leading-tight text-white shadow-md ring-1 ring-white/30">
+            <span className="text-[12px] font-bold">{business.name}</span>
+            <span className="text-[10px] opacity-90 tabular-nums">{business.phone}</span>
+          </div>
+        </MarkerContent>
+      </MapMarker>
       {works.map((w) => {
         const color = primaryCategory(w.categories, categoryMap)?.color ?? POINT;
         const isSelected = w.slug === selectedSlug;

@@ -27,10 +27,11 @@ export const business = {
     region: "경상남도",
     locality: "김해시",
     street: "활천로36번길 20-1",
-    postalCode: "", // 확인 필요
+    postalCode: "50934", // Kakao 주소 검색 결과 (2026-08-26)
+    dong: "삼정동",
   },
-  // geo로 1회 변환 후 하드코딩. 현재는 김해시청 근사값 (확인 필요)
-  location: { lng: 128.8894, lat: 35.2285 },
+  // Kakao 주소 검색으로 1회 변환해 하드코딩 (2026-08-26): 경남 김해시 삼정동 591-1
+  location: { lng: 128.895522767734, lat: 35.2318396224978 },
   hours: [
     { days: "월–금", open: "09:00", close: "18:00" },
     { days: "토", open: "09:00", close: "13:00" },
