@@ -1,0 +1,47 @@
+/** UI 문구 단일 출처 — 해요체, 능동형, 긍정형 (toss-design UX 라이팅) */
+export const ko = {
+  nav: {
+    map: "지도",
+    table: "표",
+    call: "전화하기",
+    search: "상호나 동네로 찾기",
+    allCategories: "전체",
+    about: "광고나라 소개",
+  },
+  list: {
+    empty: "조건에 맞는 작업이 아직 없어요",
+    emptyHint: "다른 종류를 골라 보거나 검색어를 지워 보세요",
+    mapLoading: "지도를 불러오고 있어요",
+    mapError: "지도를 불러오지 못했어요",
+    mapErrorAction: "표로 보기",
+    count: (n: number) => `${n.toLocaleString("ko-KR")}건`,
+    columns: { shop: "상호", category: "작업 종류", dong: "동네", date: "작업일" },
+  },
+  detail: {
+    close: "닫기",
+    openFull: "자세히 보기",
+    call: "전화하기",
+    copyAddress: "주소 복사",
+    copied: "주소를 복사했어요",
+    kakaoMap: "카카오맵",
+    naverMap: "네이버지도",
+    photos: "작업 사진",
+    noPhotos: "사진을 준비하고 있어요",
+    notFound: "작업물을 찾을 수 없어요",
+    backToList: "목록으로",
+    workedAt: "작업일",
+    share: "링크 복사",
+    shared: "링크를 복사했어요",
+    photoCounter: (i: number, n: number) => `${i} / ${n}`,
+  },
+  comment: {
+    title: "댓글",
+    empty: "아직 댓글이 없어요. 첫 댓글을 남겨 보세요",
+    owner: "광고나라",
+  },
+  panelDefault: {
+    title: "김해 간판·현수막·시트지 전문",
+    hint: "지도의 점이나 표의 행을 누르면 작업 내용을 볼 수 있어요",
+    recent: "최근 작업",
+  },
+} as const;

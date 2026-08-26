@@ -21,6 +21,15 @@
 - 기본 타일: CARTO 무료 (라이트/다크 자동 전환), API 키 불필요
 - Web Worker: 기본 unpkg 로드 → 프로덕션에선 `public/`에 복사 후 `MapLibreGL.setWorkerUrl("/maplibre-gl-worker.mjs")` 권장
 
+### Next.js 16 주의사항 (2026-08-26 스캐폴딩 시 확인, `node_modules/next/dist/docs`)
+- `middleware.ts` → **`proxy.ts`** (`export const proxy: NextProxy`, Node 런타임). 세션 갱신 + `/admin` 가드에 사용.
+- **`cacheComponents`는 켜지 않는다.** 기존 ISR 모델(`export const revalidate`, `generateStaticParams`, `dynamicParams`)이 그대로 동작. `revalidatePath` 변경 없음. (`revalidateTag`는 2번째 인자 필수 — 쓰지 않음)
+- 병렬 라우트 슬롯(`@panel`)에 **`default.tsx` 필수** — 없으면 빌드 실패.
+- `params`, `searchParams`, `cookies()`는 **항상 Promise** (`await`). `opengraph-image`의 `params`도 Promise. 타입 헬퍼 `PageProps<'/works/[slug]'>`, `LayoutProps<'/'>`.
+- `next/dynamic({ ssr:false })`는 클라이언트 컴포넌트 안에서만 → `components/work/home-map.tsx` 패턴.
+- Turbopack 기본. `images.domains` 대신 `remotePatterns`. `next lint` 제거 → `eslint` 직접 실행.
+- shadcn은 v4(`base-nova` 프리셋, `@base-ui/react` 기반, Radix 아님). 컴포넌트 API가 예전 shadcn 문서와 다를 수 있으니 `components/ui/*.tsx`를 직접 확인.
+
 ## 2. 폴더 구조 (초안)
 
 ```
@@ -185,4 +194,6 @@ create index on comments (work_id, created_at desc);
 - `MapClusterLayer`에 GeoJSON FeatureCollection 전달, 클러스터 클릭 시 확대, 개별 포인트 클릭 시 `router.push('/works/[slug]')`.
 - 선택된 작업물은 별도 `MapMarker`로 강조 + `flyTo`.
 - 타일: 기본 CARTO(라이트/다크 자동). **한글 지명 라벨 품질**이 부족하면 대안: OSM 한국어 스타일, VWorld(국토부, 무료 키), MapTiler 무료 티어. 결정은 프로토타입 후.
-- MapLibre 워커는 기본 unpkg → 안정성 위해 `public/`에 복사해 `setWorkerUrl` 사용 (mapcn 문서 권장).
+- MapLibre 워커는 `public/maplibre-gl-worker.mjs` **와 `public/maplibre-gl-shared.mjs` 둘 다** 자체 호스팅 (워커가 shared 를 import 함 — 하나만 복사하면 타일이 안 그려짐). `maplibre-gl` 업그레이드 시 두 파일 다시 복사.
+- 한글 지명: `KoreanLabels` 컴포넌트가 스타일 로드 후 심볼 레이어 `text-field` 를 `["coalesce", ["get","name:ko"], ["get","name"]]` 로 교체.
+- 클러스터링: 미적용. `MapClusterLayer` 는 단일 포인트 색만 지원 → 카테고리 색 구분과 충돌. 마커 200건 넘으면 재검토.

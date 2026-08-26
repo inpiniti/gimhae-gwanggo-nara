@@ -12,23 +12,30 @@
 - [ ] 업체 로고/컬러 확보 (없으면 심플한 텍스트 로고로 시작)
 
 ## Phase 1 — 스캐폴딩 (1일)
-- [ ] `pnpm create next-app` (TS, Tailwind, App Router)
-- [ ] `pnpm dlx shadcn@latest init` → button, card, table, dialog, sheet, badge, input, form, tabs, toggle-group 등
-- [ ] `pnpm dlx shadcn@latest add @mapcn/map`
-- [ ] Supabase 클라이언트 (`@supabase/ssr`), env 세팅
-- [ ] 마이그레이션 0001: 02-architecture.md의 스키마 + RLS + Storage 버킷
-- [ ] 시드 데이터 5건 (임시 좌표) 넣고 배포 확인
-- [ ] `.env.example`, CI(lint·tsc·vitest), 프리뷰 `noindex` 헤더 (06-operations, 09-testing)
+- [x] `pnpm create next-app` (Next 16.3, TS, Tailwind v4, App Router) — 2026-08-26
+- [x] `shadcn init -d` (v4 base-nova) → button, card, table, dialog, sheet, badge, input, textarea, label, tabs, toggle-group, skeleton, separator, tooltip, dropdown-menu, checkbox, select, sonner, scroll-area
+- [x] `shadcn add @mapcn/map` + MapLibre 워커 `public/` 자체 호스팅
+- [x] 토스 토큰(`globals.css`), Pretendard(`next/font/local`), 루트 레이아웃
+- [x] Supabase 클라이언트 3종 (`lib/supabase/{client,server,admin}.ts`), `proxy.ts` 세션 갱신 + `/admin` 가드, `.env.example`
+- [x] `supabase/migrations/0001_init.sql` (admin→category→work→comment, RLS, Storage 정책), `supabase/seed.sql` 5건
+- [x] `types/supabase.ts` 수기 작성 — **프로젝트 링크 후 `supabase gen types` 로 재생성 필요**
+- [x] `lib/domain/{business,geo}` 초기 코드, `next.config.ts` (remotePatterns, 프리뷰 noindex)
+- [ ] Supabase 원격에 마이그레이션 적용 (`supabase link` 는 로그인 필요 → 사용자 실행) 후 시드
+- [ ] Vercel 연결 및 첫 배포 확인
+- [ ] CI(lint·tsc·vitest) 워크플로 (09-testing)
 
 ## Phase 2 — 메인 화면: 지도 + 테이블 + 상세 패널 (2~3일)
-- [ ] 레이아웃: 좌(지도/테이블) + 우(패널) 2단, 모바일은 1단 + Sheet
-- [ ] `WorkMap`: dynamic import, `MapClusterLayer`, 마커 클릭 → 라우팅
-- [ ] `WorkTable`: shadcn Data Table, 정렬/필터/검색, 행 클릭 → 라우팅
-- [ ] 뷰 토글 + 필터 상태를 URL 파라미터로 (`nuqs`)
-- [ ] `@panel` 병렬 라우트 + `(.)works/[slug]` 인터셉트 → `WorkDetail` 패널 렌더
-- [ ] `WorkDetail`: 상호·전화·주소·태그·설명·갤러리(라이트박스)
-- [ ] 선택 시 지도 `flyTo` + 강조 마커
-- [ ] 한글 지명 라벨 품질 확인 → 타일 소스 결정 (05-open-questions 참고)
+- [x] 레이아웃: `app/(home)/layout.tsx` 좌(지도/표) + 우(`@panel`) 2단, 모바일은 바텀시트(`DetailPanel`)
+- [x] `WorkMap`: dynamic import, 작업물별 `MapMarker`(카테고리 색), 클릭 → 라우팅. **클러스터링은 보류** — mapcn `MapClusterLayer`가 단일 색만 지원해 카테고리 색 구분과 양립 불가. 마커 200건 넘으면 재검토
+- [x] `WorkTable`: shadcn Table + 클라이언트 정렬. TanStack/ReUI 는 100건 넘을 때 교체
+- [x] 뷰 토글 + 카테고리/검색 상태를 URL 파라미터로 (`nuqs`: `view`, `cat`, `q`)
+- [x] `@panel` 병렬 라우트 + `(.)works/[slug]` 인터셉트 → `WorkDetail` 패널, 닫기 = 뒤로가기
+- [x] `WorkDetail`: 상호·전화·주소·태그·요약·설명·갤러리(라이트박스)·댓글 목록(읽기)·액션(전화/주소복사/카카오맵/네이버지도/링크복사)
+- [x] 선택 시 지도 `flyTo` + 강조 마커, 표 ↔ 지도 hover 양방향 하이라이트
+- [x] `/works/[slug]` 전체 페이지 + `generateMetadata`(Phase 3 선행)
+- [x] 공개 읽기는 쿠키 없는 `createPublicClient` → `/` ISR 60s 유지
+- [ ] 한글 지명 라벨 품질 확인 → 타일 소스 결정 (05-open-questions #3)
+- [ ] 실기기 모바일 확인 (바텀시트, 지도 제스처)
 
 ## Phase 3 — SEO 상세 페이지 (1일)
 - [ ] `/works/[slug]/page.tsx` 전체 페이지 (SSG + ISR)

@@ -27,15 +27,16 @@ create policy categories_admin_write on categories
 
 ```sql
 insert into categories (code, name, color, sort_order) values
-  ('sign',    '간판',        '#e11d48', 10),
-  ('banner',  '현수막',      '#f59e0b', 20),
-  ('sheet',   '시트지(썬팅)', '#0ea5e9', 30),
-  ('led',     'LED',        '#8b5cf6', 40),
-  ('print',   '실사출력',    '#10b981', 50),
-  ('card',    '명함',        '#64748b', 60),
-  ('flyer',   '전단지',      '#84cc16', 70),
-  ('sticker', '스티커',      '#ec4899', 80),
-  ('etc',     '기타',        '#9ca3af', 90);
+  -- 포인트 블루(#3182f6)와 겹치지 않는 보조 색. 뱃지는 연한 배경+진한 글자, 마커는 원색.
+  ('sign',    '간판',        '#f04452', 10),
+  ('banner',  '현수막',      '#ff9500', 20),
+  ('sheet',   '시트지(썬팅)', '#00b8b8', 30),
+  ('led',     'LED',        '#7c5cff', 40),
+  ('print',   '실사출력',    '#03b26c', 50),
+  ('card',    '명함',        '#4e5968', 60),
+  ('flyer',   '전단지',      '#b5a300', 70),
+  ('sticker', '스티커',      '#e8548c', 80),
+  ('etc',     '기타',        '#8b95a1', 90);
 ```
 
 ## 삭제 정책
