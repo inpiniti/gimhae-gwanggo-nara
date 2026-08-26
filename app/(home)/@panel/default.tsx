@@ -22,6 +22,14 @@ export default async function PanelDefault() {
         <dt className="text-muted-foreground">주소</dt>
         <dd>{business.address.full}</dd>
       </dl>
+      <div className="flex gap-3 text-[13px] font-semibold">
+        <Link href="/about" className="text-primary">
+          {ko.footer.about}
+        </Link>
+        <Link href="/privacy" className="text-muted-foreground">
+          {ko.footer.privacy}
+        </Link>
+      </div>
       {recent.length > 0 && (
         <section>
           <h3 className="mb-2 text-[15px] font-bold">{ko.panelDefault.recent}</h3>

@@ -4,6 +4,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
 import { business } from "@/lib/domain/business/business";
+import { localBusinessJsonLd, serializeJsonLd } from "@/lib/seo/jsonld";
 import "./globals.css";
 
 const pretendard = localFont({
@@ -42,6 +43,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <TooltipProvider>{children}</TooltipProvider>
         </NuqsAdapter>
         <Toaster position="top-center" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(localBusinessJsonLd()) }}
+        />
       </body>
     </html>
   );

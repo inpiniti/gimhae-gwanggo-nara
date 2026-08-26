@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { WorkDetail } from "@/components/work/work-detail";
+import { serializeJsonLd, workJsonLd } from "@/lib/seo/jsonld";
 import { listCategories } from "@/lib/domain/category/queries";
 import { toCategoryMap, primaryCategory } from "@/lib/domain/category/types";
 import { business } from "@/lib/domain/business/business";
@@ -55,6 +57,8 @@ export default async function WorkPage({ params }: Params) {
   const { slug } = await params;
   const work = await getPublishedWorkBySlug(decodeURIComponent(slug));
   if (!work) notFound();
+  const categoryMap = toCategoryMap(await listCategories());
+  const categoryNames = work.categories.map((c) => categoryMap[c]?.name).filter((n): n is string => !!n);
 
   return (
     <div className="flex min-h-dvh flex-col">
@@ -68,6 +72,11 @@ export default async function WorkPage({ params }: Params) {
           <WorkDetail work={work} variant="page" />
         </div>
       </main>
+      <SiteFooter />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(workJsonLd(work, categoryNames)) }}
+      />
     </div>
   );
 }

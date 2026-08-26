@@ -14,6 +14,7 @@ import { ko } from "@/lib/i18n/ko";
 import { cn } from "@/lib/utils";
 
 const t = ko.admin.works;
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "";
 
 export function WorkList({ works, categoryMap }: { works: AdminWorkRow[]; categoryMap: CategoryMap }) {
   const router = useRouter();
@@ -80,9 +81,20 @@ export function WorkList({ works, categoryMap }: { works: AdminWorkRow[]; catego
                 {w.isPublished ? t.unpublish : t.publish}
               </button>
               {w.isPublished && (
-                <Link href={`/works/${w.slug}`} target="_blank" className="rounded-lg bg-secondary px-2.5 py-1.5">
-                  보기 ↗
-                </Link>
+                <>
+                  <Link href={`/works/${w.slug}`} target="_blank" className="rounded-lg bg-secondary px-2.5 py-1.5">
+                    보기 ↗
+                  </Link>
+                  {/* W-ADM-10: Search Console URL 검사 → 색인 요청 바로가기 */}
+                  <a
+                    href={`https://search.google.com/search-console/inspect?resource_id=${encodeURIComponent(siteUrl + "/")}&id=${encodeURIComponent(`${siteUrl}/works/${encodeURIComponent(w.slug)}`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-lg bg-secondary px-2.5 py-1.5"
+                  >
+                    구글 색인 요청 ↗
+                  </a>
+                </>
               )}
               <button
                 type="button"

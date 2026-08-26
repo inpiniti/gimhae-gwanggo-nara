@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CategoryBadge } from "@/components/category/category-badge";
+import { CommentForm } from "@/components/comment/comment-form";
 import { CommentList } from "@/components/comment/comment-list";
 import { listCategories } from "@/lib/domain/category/queries";
 import { toCategoryMap } from "@/lib/domain/category/types";
@@ -68,6 +69,9 @@ export async function WorkDetail({ work, variant }: Props) {
           <span className="text-muted-foreground tabular-nums">{comments.length}</span>
         </h3>
         <CommentList comments={comments} />
+        <div className="mt-3">
+          <CommentForm workId={work.id} />
+        </div>
       </section>
 
       {variant === "panel" && (

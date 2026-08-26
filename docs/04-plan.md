@@ -38,11 +38,11 @@
 - [ ] 실기기 모바일 확인 (바텀시트, 지도 제스처)
 
 ## Phase 3 — SEO 상세 페이지 (1일)
-- [ ] `/works/[slug]/page.tsx` 전체 페이지 (SSG + ISR)
-- [ ] `generateMetadata`, JSON-LD, `opengraph-image.tsx`
-- [ ] `sitemap.ts`, `robots.ts`
-- [ ] 메인의 목록이 서버 HTML로 링크 노출되는지 확인
-- [ ] Lighthouse 점검
+- [x] `/works/[slug]/page.tsx` 전체 페이지 (SSG + ISR)
+- [x] `generateMetadata`, JSON-LD(`LocalBusiness` 전역 + `CreativeWork`/`ImageObject`/`BreadcrumbList` 상세), `opengraph-image.tsx`(기본 + 작업물별, Pretendard OTF 임베드, 커버 사진 배경)
+- [x] `sitemap.ts`, `robots.ts`
+- [x] 메인의 목록이 서버 HTML로 링크 노출되는지 확인 (sr-only 링크 목록)
+- [ ] Lighthouse 점검 (배포 후)
 
 ## Phase 4 — 관리자 (2일)
 - [x] Supabase Auth 로그인(`/admin/login`), `requireAdmin()` 가드, `/admin/forbidden`, `scripts/create-admin.mjs`
@@ -56,20 +56,23 @@
 - [ ] 삭제 확인을 `window.confirm` 대신 Dialog 로 (토스 패턴)
 
 ## Phase 5 — 댓글 (1일)
-- [ ] `CommentList` / `CommentForm` (닉네임+비밀번호+내용)
-- [ ] 서버 액션: 검증, 허니팟, rate limit, bcrypt, insert, revalidate
-- [ ] 비밀번호로 삭제
-- [ ] 관리자 댓글 관리 (숨김/삭제/답글)
-- [ ] 스팸 발생 시 Turnstile 추가 (옵션)
+- [x] `CommentList` / `CommentForm` (닉네임+비밀번호+내용, honeypot)
+- [x] 서버 액션 `createComment`: zod, honeypot(조용히 성공), `comment_rate_ok` RPC, "광고나라" 닉네임 사칭 방지, bcrypt, IP 해시, revalidate
+- [x] `deleteOwnComment` 비밀번호 검증 삭제 (Dialog, 보조 버튼 "닫기")
+- [x] 관리자 댓글 관리 (숨김/삭제/답글) — Phase 4 에서 선행
+- [x] IP 해시 30일 후 삭제 — `/api/keepalive` cron 이 함께 처리
+- [ ] 스팸 발생 시 Turnstile 추가 (옵션, env 플래그만 예약)
 
 ## Phase 6 — 마무리 & 오픈 (1일)
-- [ ] `/about` 페이지 (연락처, 오시는 길, 취급 품목)
-- [ ] 모바일 전화 플로팅 버튼, 카카오톡 채널 링크
+- [x] `/about` 페이지 (연락처, 영업시간, 오시는 길, 취급 품목, 카카오톡 채널 버튼은 URL 설정 시 표시)
+- [x] 헤더 전화 CTA(모바일은 "전화하기" 버튼) — 별도 플로팅 버튼은 헤더 CTA 로 대체
+- [x] `/privacy` 페이지 (07-policy 1절), 푸터(소개/개인정보/관리자 링크, 저작권)
+- [x] `/api/keepalive` + `vercel.json` cron (Supabase 일시정지 방지 + IP 해시 정리). Vercel 에 `CRON_SECRET` 설정 권장
+- [x] 사장님용 사용 설명서 `docs/11-admin-guide.md`
 - [ ] 실데이터 10~20건 입력 (사장님과 함께)
-- [ ] 도메인 연결, Search Console·네이버 서치어드바이저 등록
-- [ ] `/privacy` 페이지 (07-policy 1절)
-- [ ] Google Business Profile · 네이버 스마트플레이스 · 카카오맵 등록 (03-seo 8절)
-- [ ] 사장님용 1페이지 사용 설명서 (`docs/11-admin-guide.md`)
+- [ ] **배포(사용자 직접)**: Vercel 연결, env(`NEXT_PUBLIC_SITE_URL` 실제 도메인, `COMMENT_IP_SALT`, `CRON_SECRET`), 도메인 연결
+- [ ] 배포 후: Search Console·네이버 서치어드바이저 sitemap 제출, Google Business Profile · 네이버 스마트플레이스 · 카카오맵 등록 (03-seo 8절)
+- [ ] `business.ts` 확인 필요 항목 채우기 (우편번호, 영업시간, 카카오채널, 사업자번호)
 
 ## 이후 (v2 후보)
 - 네이버 지도/카카오맵 "길찾기" 딥링크

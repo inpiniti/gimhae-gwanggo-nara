@@ -54,13 +54,15 @@ export function WorkActions({ shopName, phone, address, location, slug }: Props)
       >
         <ExternalLink className="size-4" /> {ko.detail.naverMap}
       </a>
-      <button
-        type="button"
-        onClick={() => copy(`${window.location.origin}/works/${slug}`, ko.detail.shared)}
-        className={cn(btn, "bg-secondary text-secondary-foreground")}
-      >
-        <Share2 className="size-4" /> {ko.detail.share}
-      </button>
+      {slug && (
+        <button
+          type="button"
+          onClick={() => copy(`${window.location.origin}/works/${slug}`, ko.detail.shared)}
+          className={cn(btn, "bg-secondary text-secondary-foreground")}
+        >
+          <Share2 className="size-4" /> {ko.detail.share}
+        </button>
+      )}
     </div>
   );
 }

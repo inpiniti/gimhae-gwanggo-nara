@@ -1,6 +1,7 @@
 import type { PublicComment } from "@/lib/domain/comment/types";
 import { ko } from "@/lib/i18n/ko";
 import { cn } from "@/lib/utils";
+import { CommentDeleteButton } from "./comment-delete-button";
 
 function formatDate(iso: string) {
   const d = new Date(iso);
@@ -8,7 +9,7 @@ function formatDate(iso: string) {
   return `${d.getFullYear()}.${p(d.getMonth() + 1)}.${p(d.getDate())}`;
 }
 
-/** 댓글 목록 (읽기). 작성 폼은 Phase 5. */
+/** 댓글 목록 (읽기 + 본인 삭제) */
 export function CommentList({ comments }: { comments: PublicComment[] }) {
   if (comments.length === 0) {
     return (
@@ -32,6 +33,7 @@ export function CommentList({ comments }: { comments: PublicComment[] }) {
               </span>
             )}
             <span className="ml-auto text-muted-foreground tabular-nums">{formatDate(c.createdAt)}</span>
+            {!c.isOwner && <CommentDeleteButton id={c.id} />}
           </div>
           <p className="mt-1.5 text-[15px] leading-relaxed whitespace-pre-line">{c.body}</p>
         </li>
