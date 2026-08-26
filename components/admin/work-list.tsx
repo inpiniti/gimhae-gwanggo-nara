@@ -18,18 +18,20 @@ const t = ko.admin.works;
 const siteUrl = business.siteUrl;
 
 /**
- * Search Console 딥링크는 계정 불일치/인코딩 문제로 404 가 나기도 한다.
- * → URL 을 클립보드에 복사해 두고 딥링크를 연다. 404 면 서치콘솔 상단 검색창에 붙여넣으면 된다.
- * id 는 한 번만 인코딩 (slug 를 미리 인코딩하지 않음).
+ * Search Console 의 URL 검사 딥링크(`inspect?…&id=`)는 2026-08 현재 `id` 를 주면 404 를 반환한다
+ * (계정·인코딩과 무관하게 재현됨). 그래서 확실한 흐름으로 간다:
+ * 페이지 URL 을 클립보드에 복사 → 속성 메인만 열기 → 상단 검색창에 붙여넣고 Enter → "색인 생성 요청".
  */
 async function requestIndexing(pageUrl: string) {
   try {
     await navigator.clipboard.writeText(pageUrl);
-    toast.success("페이지 URL을 복사했어요. 서치콘솔이 404면 상단 검색창에 붙여넣어 주세요");
+    toast.success("페이지 URL을 복사했어요. 서치콘솔 상단 검색창에 붙여넣고 Enter → 색인 생성 요청", {
+      duration: 6000,
+    });
   } catch {
-    /* clipboard 불가 시 무시 */
+    toast(pageUrl, { duration: 8000 });
   }
-  const url = `https://search.google.com/search-console/inspect?resource_id=${encodeURIComponent(siteUrl + "/")}&id=${encodeURIComponent(pageUrl)}`;
+  const url = `https://search.google.com/search-console?resource_id=${encodeURIComponent(siteUrl + "/")}`;
   window.open(url, "_blank", "noopener,noreferrer");
 }
 
@@ -107,7 +109,7 @@ export function WorkList({ works, categoryMap }: { works: AdminWorkRow[]; catego
                     type="button"
                     onClick={() => requestIndexing(`${siteUrl}/works/${w.slug}`)}
                     className="rounded-lg bg-secondary px-2.5 py-1.5"
-                    title="페이지 URL을 복사하고 서치콘솔 URL 검사를 열어요. 404가 뜨면 서치콘솔 상단 검색창에 붙여넣기 하세요"
+                    title="페이지 URL을 복사하고 서치콘솔을 열어요. 상단 검색창에 붙여넣고 Enter → 색인 생성 요청"
                   >
                     구글 색인 요청 ↗
                   </button>
