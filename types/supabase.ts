@@ -135,6 +135,7 @@ export type Database = {
           worked_at: string | null;
           cover_path: string | null;
           categories: string[];
+          phone: string | null;
         };
         Relationships: [];
       };

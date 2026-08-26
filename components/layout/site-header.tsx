@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Phone } from "lucide-react";
+import { Phone, Settings } from "lucide-react";
 import { business, telHref } from "@/lib/domain/business/business";
 import { ko } from "@/lib/i18n/ko";
 
@@ -10,6 +10,14 @@ export function SiteHeader({ children }: { children?: React.ReactNode }) {
         {business.name}
       </Link>
       <div className="flex min-w-0 flex-1 items-center gap-2">{children}</div>
+      <Link
+        href="/admin"
+        className="inline-flex h-10 shrink-0 items-center gap-1 rounded-xl px-2.5 text-sm font-semibold text-muted-foreground hover:bg-secondary"
+        aria-label={ko.footer.admin}
+      >
+        <Settings className="size-4" />
+        <span className="hidden sm:inline">{ko.footer.admin}</span>
+      </Link>
       <a
         href={telHref(business.phone)}
         className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-xl bg-primary px-3.5 text-sm font-semibold text-primary-foreground"

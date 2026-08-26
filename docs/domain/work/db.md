@@ -83,7 +83,8 @@ select
   w.id, w.slug, w.shop_name, w.address, w.address_dong,
   w.lng, w.lat, w.summary, w.worked_at,
   (select path from work_images i where i.work_id = w.id order by is_cover desc, sort_order limit 1) as cover_path,
-  array(select category_code from work_categories c where c.work_id = w.id) as categories
+  array(select category_code from work_categories c where c.work_id = w.id) as categories,
+  w.phone                                    -- 0002: 지도 마커 라벨용
 from works w
 where w.is_published;
 ```

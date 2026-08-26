@@ -17,6 +17,7 @@ export async function listPublishedWorks(): Promise<WorkListItem[]> {
     id: r.id,
     slug: r.slug,
     shopName: r.shop_name,
+    phone: r.phone ?? null,
     address: r.address,
     addressDong: r.address_dong,
     location: { lng: r.lng, lat: r.lat },

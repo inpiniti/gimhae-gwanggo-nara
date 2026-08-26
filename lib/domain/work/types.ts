@@ -6,6 +6,7 @@ export type WorkListItem = {
   id: string;
   slug: string;
   shopName: string;
+  phone: string | null;
   address: string;
   addressDong: string | null;
   location: Location;
